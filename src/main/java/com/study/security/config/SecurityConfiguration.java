@@ -19,6 +19,27 @@ public class SecurityConfiguration {
 
     private final UserDetailsService userDetailsService;
 
+    /**
+     * Spring Security 에서 사용자가 로그인하면, SecurityContext 라는 개념을 사용하여 현재 사용자의 보안 정보를 추적한다
+     * SecurityContext 에는 Authentication 객체가 포함되어 있다
+     * 사용자의 로그인상태, 사용자 이름 및 권한과 같은 정보는 이 Authentication 객체를 통해 사용할 수 있다
+     * isAuthenticated()
+     *  - isAuthenticated()는 현재 사용자가 인증되었는지 여부를 나타냄
+     *  - 'true' 인 경우 사용자는 성공적으로 인증되었음을 의미하며, 'false' 인 경우 익명사용자 또는 인증되지 않은 사용자를 나타냄
+     *  - 이 값은 Authentication 객체의 isAuthenticated() 메서드를 통해 확인됨
+     *
+     * remoteUser
+     *  - 'remoteUser' 는 현재 사용자의 이름을 나타냄
+     *  - Spring Security 에서는 사용자 이름을 주로 "principal" 이라고도 부른다
+     *  - Authentication 객체의 getName() 메서드를 통해 현재 사용자의 이름을 얻을 수 있다
+     *
+     * principal.authorities
+     *  - principal.authorities 는 현재 사용자의 권한 목록을 나타냄
+     *  - Spring Security 에서 권한은 GrantedAuthority 인터페이스를 구현하는 객체로 표현됨
+     *  - Authentication 객체의 getAuthorities() 메서드를 통해 현재 사용자의 권한 목록을 얻을 수 있다
+     *  - 권한은 주로 역할(Role) 또는 특정 동작에 대한 권한(Authority) 일 수 있다
+     */
+
     @Bean
     public static BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
