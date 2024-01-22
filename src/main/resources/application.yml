@@ -1,0 +1,22 @@
+spring:
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/security
+    username: sa
+    password:
+  sql:
+    init:
+      mode: always
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: true
+    open-in-view: false

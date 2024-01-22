@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Hello World!</title>
+</head>
+<body>
+    <!--
+        여기서 한가지 짚고 넘어가야할 부분이 있다. 테이블 role 테이블의 SYSTEM 역할의 값은 ROLE_SYSTEM 이다
+        그렇지만 아래의 값을 보면 hasRole('SYSTEM') 을 비교하고 있으며 hasRole 메소드의 경우에는 접두어로써 'ROLE_'값을 붙여
+        조회하기 때문에 매칭이 된다. 흔히 Spring Security 에서 제공하는 역할(Role) 과 권한 (Authority) 을 혼동하여 하용하는 경우가 많은데 비슷하면서도 다르다.
+        예를 들어 A 계정과 B 계정은 둘다 시스템 관리자로서 SYSTEM 역할을 가지고 있지만 원칙상 A 계정은 게시판의 글을 등록할 수만 있으며,
+        B 계정은 등록된 글을 수정만 할 수 있다고 했을 때 역할은 같지만 권한은 다르게 설정해야 할 것이다.
+      -->
+    <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+    <br>
+
+    <!--SYSTEM 역할을 갖는다면 이 글이 보임-->
+    <h3 sec:authorize="hasRole(T(com.study.security.enums.MemberRole).SYSTEM)">Has SYSTEM Role</h3>
+
+    <!--SYSTEM 역할과 OP_CREATE_DATA 권한을 갖는다면 이 글이 보임-->
+    <h3 sec:authorize="hasRole(T(com.study.security.enums.MemberRole).SYSTEM) and hasAuthority(T(com.study.security.enums.UserAuthority).OP_CREATE_DATA)">Has OP_CREATE_DATA Authority</h3>
+
+    <!--SYSTEM 역할과 OP_DELETE_DATA 권한을 갖는다면 이 글이 보임-->
+    <h3 sec:authorize="hasRole(T(com.study.security.enums.MemberRole).SYSTEM) and hasAuthority(T(com.study.security.enums.UserAuthority).OP_DELETE_DATA)">Has OP_DELETE_DATA Authority</h3>
+
+    <!--USER 역할을 갖는다면 이 글이 보임-->
+    <h3 sec:authorize="hasRole(T(com.study.security.enums.MemberRole).USER)">Has USER Role</h3>
+
+    <!--USER 역할을 갖는다면 이 글이 보임-->
+    <h3 sec:authorize="hasRole('BOARD')">Has BOARD Role</h3>
+
+    <!--어떤 역할이건 상관없이 인증이 되었다면 이 글이 보임-->
+    <h3 sec:authorize="isAuthenticated()">Only Authenticated user can see this Text</h3>
+
+    <div>
+        Authorities : <span sec:authentication="principal.authorities"></span>
+    </div>
+    <br>
+
+    <p>
+        시스템 관리자 페이지로 이동 <a th:href="@{/system}">SYSTEM</a>
+    </p>
+    <p>
+        시스템 관리자 등록 페이지로 이동 <a th:href="@{/system/create}">SYSTEM CREATE</a>
+    </p>
+    <p>
+        시스템 관리자 삭제 페이지로 이동 <a th:href="@{/system/delete}">SYSTEM DELETE</a>
+    </p>
+
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
+</body>
+</html>
